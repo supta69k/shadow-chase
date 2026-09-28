@@ -1,0 +1,15 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Runtime save data (created by the game)
+best_scores.json
+
+# OS clutter
+Thumbs.db
+.DS_Store
+
+# Local coursework (not part of the game)
+assignment_build/
+CSEOS3337_*.docx
+CSEOS3337_*.pdf
