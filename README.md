@@ -1,6 +1,6 @@
 # Shadow Chase
 
-![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![Pygame](https://img.shields.io/badge/pygame-2.5%2B-green) ![License](https://img.shields.io/badge/license-MIT-yellow) ![Tests](https://img.shields.io/badge/tests-21%20passing-brightgreen)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![Pygame](https://img.shields.io/badge/pygame-2.5%2B-green) ![License](https://img.shields.io/badge/license-MIT-yellow) ![Tests](https://img.shields.io/badge/tests-21%20passing-brightgreen) [![tests](https://github.com/supta69k/shadow-chase/actions/workflows/tests.yml/badge.svg)](https://github.com/supta69k/shadow-chase/actions/workflows/tests.yml)
 
 **Shadow Chase** is a compact, demo-friendly Artificial Intelligence project built with Python and Pygame. A hidden Ghost moves through a neon city while the Hunter AI uses noisy sensor clues, a belief distribution, a shallow adversarial search, and A* pathfinding to investigate likely locations.
 
@@ -50,6 +50,8 @@ From this folder:
 python -m pip install -r requirements.txt
 python main.py
 ```
+
+On Windows you can also just **double-click `PlayShadowChase.bat`**.
 
 For a non-graphical core check:
 
