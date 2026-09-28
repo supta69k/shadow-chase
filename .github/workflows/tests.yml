@@ -1,5 +1,5 @@
-# pygame is the only runtime dependency; the core tests need neither pygame
-# nor a display, but we install it anyway to validate the real setup path.
+# Runs the core unit tests + smoke test on every push and pull request.
+# Full step output is uploaded as an artifact so failures are always diagnosable.
 
 name: tests
 
@@ -7,11 +7,17 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest]
         python-version: ["3.10", "3.12", "3.13"]
+        exclude:
+          - os: windows-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.13"
     env:
       SDL_VIDEODRIVER: dummy
       SDL_AUDIODRIVER: dummy
@@ -20,12 +26,23 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies (binary wheels only)
+      - name: Install, test, and capture output
         run: |
-          python -m pip install --upgrade pip
-          pip install --only-binary=:all: -r requirements.txt
-          pip freeze
-      - name: Unit tests
-        run: python -m unittest discover -s tests -v
-      - name: Smoke test (one full AI turn)
-        run: python main.py --smoke-test
+          mkdir _ci
+          {
+            python -m pip install --upgrade pip
+            pip install --only-binary=:all: -r requirements.txt
+            pip freeze
+            python -m unittest discover -s tests -v
+            python main.py --smoke-test
+            echo ALL_STEPS_PASSED
+          } > _ci/output.log 2>&1
+          tail -30 _ci/output.log
+        shell: bash
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-log-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: _ci/output.log
+          if-no-files-found: warn
